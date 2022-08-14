@@ -1,5 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import morgan from 'morgan'
+
 import customersRouter from './routes/customersRouter.js'
 
 const app = new express()
@@ -14,6 +16,7 @@ mongoose
     })
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/', (req, res) => {
     return res.json({ message: 'Hello Express!' })
