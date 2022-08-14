@@ -28,7 +28,7 @@ customersRouter.post('/login', async (req, res) => {
         return res.status(401).json({ error: 'incorrect password' })
     }
 
-    const sessionId = uid.sync(18)
+    const sessionId = uid.sync(24)
     customer.sessions = customer.sessions.concat(sessionId)
     await customer.save()
 
