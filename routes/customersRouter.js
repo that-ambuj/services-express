@@ -13,7 +13,7 @@ customersRouter.post('/signup', async (req, res) => {
     const passwordHash = await bcrypt.hash(customerData.password, 10)
 
     const newCustomer = new Customer({ ...customerData, passwordHash })
-    const savedCustomer = newCustomer.save()
+    const savedCustomer = await newCustomer.save()
 
     return res.status(201).json(savedCustomer)
 })
