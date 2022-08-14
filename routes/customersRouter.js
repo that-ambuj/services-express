@@ -39,10 +39,15 @@ customersRouter.post('/login', async (req, res) => {
         secure: true,
     })
 
-    res.cookie('cid', customer.id)
+    res.cookie('cid', customer.id, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+    })
     return res.status(202).end()
 })
 
+// TODO add identity verification with password for clearing sessions ( possibly in frontend )
 customersRouter.post('/clearAllSessions', customerParser, async (req, res) => {
     const customer = req.customer
 
