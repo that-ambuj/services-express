@@ -3,7 +3,10 @@ import mongoose from 'mongoose'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 
+import customerParser from './utils/customerParser.js'
+
 import customersRouter from './routes/customersRouter.js'
+import jobsRouter from './routes/jobsRouter.js'
 
 const app = new express()
 
@@ -26,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/customer', customersRouter)
+app.use('/jobs', customerParser, jobsRouter)
 
 app.listen(3001, () => {
     console.log('Server is running at http://localhost:3001')

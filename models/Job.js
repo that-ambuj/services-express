@@ -11,7 +11,11 @@ const jobSchema = new mongoose.Schema(
             default: null,
         },
         status: { type: String, required: true, default: 'unassigned' },
-        createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Customer',
+            required: true,
+        },
         location: {
             area: String,
             city: String,
@@ -19,7 +23,15 @@ const jobSchema = new mongoose.Schema(
             coordinates: { latitude: Number, longitude: Number },
         },
     },
-    { timestamps: true }
+    { timestamps: true },
 )
+
+jobSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    },
+})
 
 export default mongoose.model('Job', jobSchema)
