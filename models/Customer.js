@@ -11,20 +11,21 @@ const customerSchema = new mongoose.Schema({
             area: String,
             city: String,
             state: String,
-            pincode: Number
-        }
+            pincode: Number,
+        },
     ],
     contactDetails: {
         number: String,
-        email: String
+        email: String,
     },
     // Jobs created by the user
     jobs: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Job'
-        }
-    ]
+            ref: 'Job',
+        },
+    ],
+    sessions: [{ type: String }],
 })
 
 export default mongoose.model('Customer', customerSchema)
