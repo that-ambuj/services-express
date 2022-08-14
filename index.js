@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 
 import customersRouter from './routes/customersRouter.js'
 
@@ -17,12 +18,14 @@ mongoose
 
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
+    console.log(req.cookies)
     return res.json({ message: 'Hello Express!' })
 })
 
-app.use('/customers', customersRouter)
+app.use('/customer', customersRouter)
 
 app.listen(3001, () => {
     console.log('Server is running at http://localhost:3001')
