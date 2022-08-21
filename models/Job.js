@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema(
             ref: 'Worker',
             default: null,
         },
-        status: { type: String, required: true, default: 'unassigned' },
+        status: { type: String, required: true, default: 'UNASSIGNED' },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Customer',
