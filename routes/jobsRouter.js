@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import Job from '../models/Job.js'
-import customerParser from '../utils/customerParser.js'
+import Worker from '../models/Worker.js'
 
 const jobsRouter = new Router()
 
@@ -36,6 +36,50 @@ jobsRouter.post('/', async (req, res) => {
     await customer.save()
 
     return res.status(201).json(savedJob)
+})
+
+jobsRouter.put('/:id/assign-worker', async (req, res) => {
+    const workerId = req.body.workerId
+    const job = await Job.findById(req.params.id)
+
+    const workerExists = (await Worker.findById(workerId)) !== undefined
+
+    if (!workerExists) {
+        return res.status(404).json({ error: 'worker with that id does not exist' })
+    }
+
+    job.assignedTo = workerId
+    job.status = 'ACTIVE'
+    const savedJob = await job.save()
+
+    return res.status(202).json({
+        message: `${savedJob.id} has been assigned to ${
+            savedJob.populate('assignedTo').assignedTo
+        }`,
+    })
+})
+
+jobsRouter.post('/:id/set-done', async (req, res) => {
+    const job = await Job.findById(req.params.id)
+
+    if (job.status === 'ACTIVE') {
+        return res
+            .status(400)
+            .json({
+                error: 'The job must be assigned to a worker before setting it done',
+            })
+    }
+
+    if (job.status === 'DONE') {
+        return res
+            .status(400)
+            .json({ error: "A finished job's status cannot be changed." })
+    }
+
+    job.status = 'DONE'
+    await job.save()
+
+    return res.json({ message: `Job ${job.id} has been done!` })
 })
 
 export default jobsRouter
